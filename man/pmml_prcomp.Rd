@@ -4,12 +4,12 @@
 \alias{pmml_prcomp}
 \title{Generate PMML for prcomp objects}
 \usage{
-pmml_prcomp(model, n = 1, ...)
+pmml_prcomp(model, j = 1, ...)
 }
 \arguments{
 \item{model}{A prcomp object.}
 
-\item{n}{The number of the principal component for which the PMML will be created.
+\item{j}{Index of the eigenvector for which the PMML will be created.
 Per default, the PMML will be constructed based on the eigenvector of the
 first principal component.}
 

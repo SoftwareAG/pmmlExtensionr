@@ -1,5 +1,5 @@
 Package: pmmlExtensionr
-Title: Generate PMML for R models which are not supported by the standard pmml package.
+Title: Generate PMML for R models which are not supported by the standard pmml package
 Version: 0.1.0
 Authors@R: person("Alexader", "Lemm", email = "alex23lemm@gmail.com", role = c("aut", "cre"))
 Description: Extension of the standard pmml package to support the generation of 
