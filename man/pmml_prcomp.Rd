@@ -2,10 +2,9 @@
 % Please edit documentation in R/pmml_prcomp.R
 \name{pmml_prcomp}
 \alias{pmml_prcomp}
-\title{Generates PMML for prcomp objects}
+\title{Generate PMML for prcomp objects}
 \usage{
-pmml_prcomp(model, n = 1, model.name = "Principal_Component_Model",
-  description = "Principal Component Model")
+pmml_prcomp(model, n = 1, ...)
 }
 \arguments{
 \item{model}{A prcomp object.}
@@ -13,13 +12,16 @@ pmml_prcomp(model, n = 1, model.name = "Principal_Component_Model",
 \item{n}{The number of the principal component for which the PMML will be created.
 Per default, the PMML will be constructed based on the eigenvector of the
 first principal component.}
+
+\item{...}{Further arguments passed to \code{pmml.lm()} which make sense in
+the given context}
 }
 \value{
-An object of class XMLnode which is of type PMML.
+An object of class XMLNode which is of type PMML.
 }
 \description{
-Extracts one principal component from a prcomp object together with the
-centering and scaling information and generates the PMML representation.
+Extract one principal component from a prcomp object together with the
+centering and scaling information and generate the PMML representation.
 }
 \details{
 In general, each principal component represents a linear combination of the
@@ -36,4 +38,12 @@ the coefficients of the selected principal component. "minimal" in the way
 that all information is present which \code{pmml.lm()} from \pkg{pmml} needs
 to create a valid PMML. In a final step the pre-processing steps and
 the "minimal" lm object are passed to \code{pmml.lm()} to create the PMML.
+}
+\examples{
+iris <- iris[, -5]
+pc_iris <- prcomp(iris, center = FALSE, scale. = FALSE)
+pmml_prcomp(pc_iris)
+
+pc_iris <- prcomp(iris, center = TRUE, scale. = TRUE)
+pmml_prcomp(pc_iris, 2)
 }
