@@ -2,14 +2,16 @@
 pmmlExtensionr
 ==============
 
+[![Travis-CI Build Status](https://travis-ci.org/alex23lemm/pmmlExtensionr.svg?branch=master)](https://travis-ci.org/alex23lemm/pmmlExtensionr)
+
 Overview
 --------
 
-The goal of pmmlExtensionr is to convert specific R model types to PMML which are not yet supported by the standard [`pmml` package](http://cran.r-project.org/web/packages/pmml/). To do so it leverages functionality of the [`pmmlTransformations` package]((http://cran.r-project.org/web/packages/pmmlTransformations/)) and of the `pmml` package itself.
+The goal of pmmlExtensionr is to convert specific R model types to PMML which are not yet supported by the standard [`pmml`](http://cran.r-project.org/web/packages/pmml/) package. To do so it leverages functionality of the [`pmmlTransformations`](http://cran.r-project.org/web/packages/pmmlTransformations/) package and of the `pmml` package itself.
 
 The following model types are currently supported:
 
--   `prcomp`
+-   prcomp
 
 Installation
 ------------
@@ -22,16 +24,24 @@ You can install pmmlExtensionr from GitHub with:
 devtools::install_github("alex23lemm/pmmlExtensionr)
 ```
 
-Example
--------
+Usage
+-----
 
-This is a basic example which shows you how to solve a common problem:
+**prcomp**
+
+`pmml_prcomp()` extracts one principal component from a prcomp object together with the centering and scaling information and generates the PMML representation.
 
 ``` r
-## basic example code
+library(pmmlExtensionr)
+
+iris <- iris[, -5]
+piris <- prcomp(iris, center = TRUE, scale. = TRUE)
+
+# Create a PMML representation for the third eigenvector
+pmml_prcomp(piris, 3)
 ```
 
 Related Work
 ------------
 
--   [`R2PMML` package](https://github.com/jpmml/r2pmml)
+-   [R2PMML](https://github.com/jpmml/r2pmml)
