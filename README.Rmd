@@ -57,6 +57,4 @@ pmml_prcomp(piris, 3)
 
 ```
 
-## Related Work
 
-* [R2PMML](https://github.com/jpmml/r2pmml)
