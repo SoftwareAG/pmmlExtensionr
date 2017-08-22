@@ -34,7 +34,7 @@ You can install pmmlExtensionr from GitHub with:
 ```{r eval=FALSE}
 
 # install.packages("devtools")
-devtools::install_github("alex23lemm/pmmlExtensionr)
+devtools::install_github("alex23lemm/pmmlExtensionr")
 ```
 
 
