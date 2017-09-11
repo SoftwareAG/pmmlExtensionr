@@ -7,7 +7,7 @@ my_iris <- iris[, -5]
 convert_to_character <- function(xml_doc, index) {
   result <- as(xml_doc[[index]], "character") %>%
     gsub("[\n\r]", "", .) %>%
-    gsub("> <", "", .)
+    gsub(">[ \t]+<", "><", .)
   result
 }
 
