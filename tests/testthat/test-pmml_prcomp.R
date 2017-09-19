@@ -24,9 +24,15 @@ test_that("creates PMML correctly for false/false combination", {
 
   l <- list(doc, pmml)
 
+  namespaces <- purrr::map(l, ~ c(ns = XML::getDefaultNamespace(.)))
+  coefficients <- purrr::map2(l, namespaces,
+                            ~ XML::xpathSApply(.x, "//ns:NumericPredictor/@coefficient",
+                                        namespaces = .y))
+
   data_dictionary_sections <- purrr::map_chr(l, convert_to_character, 2)
   regression_model_sections <- purrr::map_chr(l, convert_to_character, 3)
 
+  expect_equal(coefficients[[1]], coefficients[[2]])
   expect_equal(data_dictionary_sections[1], data_dictionary_sections[2])
   expect_equal(regression_model_sections[1], regression_model_sections[2])
 })
