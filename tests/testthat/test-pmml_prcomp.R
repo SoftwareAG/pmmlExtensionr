@@ -1,60 +1,53 @@
 context("pmml_prcomp")
 
 library(magrittr)
+library(XML)
+library(purrr)
 
 my_iris <- iris[, -5]
-
-# convert_to_character <- function(xml_doc, index) {
-#   result <- as(xml_doc[[index]], "character") %>%
-#     gsub("(\r\n)+|\r+|\n+", "", .) %>%
-#     gsub(">[ \t]+<", "><", .)
-#   result
-# }
-#
-#
-# test_that("creates PMML correctly for false/false combination", {
-#   doc <- XML::xmlParse("./tests/testthat/FF_pca.xml") %>%
-#   #doc <- XML::xmlParse("FF_pca.xml") %>%
-#     XML::xmlRoot()
-#   pmml <- prcomp(my_iris, center = TRUE, scale. = TRUE) %>%
-#     pmml_prcomp(1, model.name = "iris_pca1_FF") %>%
-#     XML::saveXML(tempfile()) %>%
-#     XML::xmlParse() %>%
-#     XML::xmlRoot()
-#
-#   l <- list(doc, pmml)
-#
-#   namespaces <- purrr::map(l, ~ c(ns = XML::getDefaultNamespace(.)))
-#   coefficients <- purrr::map2(l, namespaces,
-#                             ~ XML::xpathSApply(.x, "//ns:NumericPredictor/@coefficient",
-#                                         namespaces = .y))
-#
-#   data_dictionary_sections <- purrr::map_chr(l, convert_to_character, 2)
-#   regression_model_sections <- purrr::map_chr(l, convert_to_character, 3)
-#
-#   expect_equal(coefficients[[1]], coefficients[[2]])
-#   #expect_equal(data_dictionary_sections[1], data_dictionary_sections[2])
-#   #expect_equal(regression_model_sections[1], regression_model_sections[2])
-# })
+index <- 1
+pca_list <- map2(.x = c(FALSE, FALSE, TRUE, TRUE),
+                 .y = c(FALSE, TRUE, FALSE, TRUE),
+                 ~ prcomp(my_iris, center = .x, scale. = .y))
+pmml_list <- map(pca_list, ~ pmml_prcomp(.x, index) %>%
+                   saveXML(tempfile()) %>%
+                   xmlParse() %>%
+                   xmlRoot())
 
 
-test_that("creates PMML correctly for false/false combination", {
+test_that("Coefficients are inserted correctly to PMML", {
+  pca_coefficients <- map(pca_list, ~ .x[["rotation"]][, index] %>%
+                            as.vector)
+  pmml_coefficients <- map(pmml_list, ~ xpathSApply(.x, "//ns:NumericPredictor/@coefficient",
+                                                    namespaces = c(ns = getDefaultNamespace(.x))) %>%
+                             as.numeric)
+  map2(pca_coefficients, pmml_coefficients, expect_equal)
+})
 
-  index <- 1
-  pca <- prcomp(my_iris, center = FALSE, scale. = FALSE)
-  pmml <- pmml_prcomp(pca, index) %>%
-    XML::saveXML(tempfile()) %>%
-    XML::xmlParse() %>%
-    XML::xmlRoot()
 
-  pmml_coefficients <- XML::xpathSApply(pmml, "//ns:NumericPredictor/@coefficient",
-              namespaces = c(ns = XML::getDefaultNamespace(pmml))) %>%
-    as.numeric()
+test_that("Center information is inserted correctly to PMML", {
+  pca_centers <- map(pca_list, ~ .x[["center"]] %>% as.vector)
+  # Taking into account that not all prcomp objects contain centering information
+  pca_centers <- map_if(pca_centers, is.logical, ~ vector(mode = "numeric", length = 0))
+  pmml_centers <-  map(pmml_list, ~ xpathSApply(.x, "//ns:Apply[@function='-']/ns:Constant",
+                                    xmlValue,
+                                    namespaces = c(ns = getDefaultNamespace(.x))) %>%
+    as.numeric)
 
-  pca_coefficients <- pca$rotation[,index] %>%
-    as.vector
+  map2(pca_centers, pmml_centers, expect_equal)
+})
 
-  expect_equal(pmml_coefficients, pca_coefficients)
+
+test_that("Scaling information is inserted correctly to PMML", {
+  pca_scales <- map(pca_list, ~ .x[["scale"]] %>% as.vector)
+  # Taking into account that not all prcomp objects contain scaling information
+  pca_scales <- map_if(pca_scales, is.logical, ~ vector(mode = "numeric", length = 0))
+  pmml_scales <-  map(pmml_list, ~ xpathSApply(.x, "//ns:Apply[@function='/']/ns:Constant",
+                                                            xmlValue,
+                                                            namespaces = c(ns = getDefaultNamespace(.x))) %>%
+                                as.numeric)
+
+  map2(pca_scales, pmml_scales, expect_equal)
 })
 
 
