@@ -2,7 +2,7 @@
 pmmlExtensionr
 ==============
 
-[![Travis-CI Build Status](https://travis-ci.org/alex23lemm/pmmlExtensionr.svg?branch=master)](https://travis-ci.org/alex23lemm/pmmlExtensionr) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/alex23lemm/pmmlExtensionr?branch=master&svg=true)](https://ci.appveyor.com/project/alex23lemm/pmmlExtensionr)
+[![Build Status](https://travis-ci.org/SoftwareAG/pmmlExtensionr.svg?branch=master)](https://travis-ci.org/SoftwareAG/pmmlExtensionr) [![Build status](https://ci.appveyor.com/api/projects/status/99vd7jwrue71kx05/branch/master?svg=true)](https://ci.appveyor.com/project/alex23lemm/pmmlextensionr/branch/master)
 
 Overview
 --------
