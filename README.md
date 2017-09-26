@@ -21,7 +21,7 @@ You can install pmmlExtensionr from GitHub with:
 ``` r
 
 # install.packages("devtools")
-devtools::install_github("alex23lemm/pmmlExtensionr")
+devtools::install_github("SoftwareAG/pmmlExtensionr")
 ```
 
 Usage
