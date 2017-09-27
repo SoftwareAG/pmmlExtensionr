@@ -40,4 +40,6 @@ piris <- prcomp(iris, center = TRUE, scale. = TRUE)
 # Create a PMML representation for the third eigenvector
 pmml_prcomp(piris, 3)
 
+```
+
 
