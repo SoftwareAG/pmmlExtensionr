@@ -1,3 +1,5 @@
+# !!! Archived -- this repository is archived and currently not actively maintained!
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 pmmlExtensionr
 ==============
